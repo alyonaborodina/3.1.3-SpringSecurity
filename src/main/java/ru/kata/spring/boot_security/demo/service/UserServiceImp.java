@@ -36,7 +36,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
     @Transactional
     @Override
-    public User findById(Integer id) {
+    public User findById(Long id) {
         return userDao.findById(id);
     }
 

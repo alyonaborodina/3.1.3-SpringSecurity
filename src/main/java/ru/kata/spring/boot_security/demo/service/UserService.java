@@ -9,7 +9,7 @@ import java.util.List;
 public interface UserService {
     void delete(Integer id);
     List<User> findAll();
-    User findById(Integer id);
+    User findById(Long id);
     User findByUsername(String username);
     void save(User user);
 }
