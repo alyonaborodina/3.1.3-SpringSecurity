@@ -13,6 +13,7 @@ import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.servlet.annotation.WebServlet;
+import java.security.Principal;
 import java.util.List;
 
 
@@ -22,28 +23,15 @@ public class UserController {
 
     private final UserService userService;
 
-    private final RoleService roleService;
-
-    public UserController(UserService userService, RoleService roleService) {
+    @Autowired
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.roleService = roleService;
     }
 
-    @GetMapping("/")
-    public String ShowUser(Model model) {
-// Получаем текущего аутентифицированного пользователя
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication != null && authentication.isAuthenticated()) {
-            // Получаем пользователя
-            String currentUserName = authentication.getName(); // это имя пользователя
-            model.addAttribute("username", currentUserName); // добавляем в модель для использования в представлении
-        } else {
-            model.addAttribute("username", "Гость"); // альтернативное значение для неаутентифицированных пользователей
-        }
-
+    @GetMapping()
+    public String showPageUser(Principal principal, Model model) {
+        model.addAttribute("user", userService.findByUsername(principal.getName()));
         return "user";
-
     }
 }
 
