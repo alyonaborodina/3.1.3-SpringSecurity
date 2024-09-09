@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,37 +33,37 @@ public class AdminController {
     }
 
     @GetMapping("/users")
-    public List<User> getUsers() {
-        return userService.findAll();
+    public ResponseEntity<List<User>> getUsers() {
+        return ResponseEntity.ok(userService.findAll());
     }
 
 
     @PostMapping ("/users")
-    public User createUser(@Valid @RequestBody User user, @RequestParam("roleIds") Set<String> roleIds) {
+    public ResponseEntity<List<User>> createUser(@Valid @RequestBody User user, @RequestParam("roleIds") Set<String> roleIds) {
         Set<Role> rolesSet = roleService.getRolesFromIds(roleIds);
         user.setRoles(rolesSet);
         userService.save(user);
-        return user;
+        return ResponseEntity.ok(userService.findAll());
     }
 
     @GetMapping("/users/{id}")
-    public User getUser(@PathVariable Long id) {
-        return userService.findById(id);
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.findById(id));
     }
 
     @PutMapping("/users/{id}")
-    public User updateUser(@PathVariable Integer id, @Valid @RequestBody User user, @RequestParam(value = "selectedRoles") Set<String> selectedRoles ) {
+    public ResponseEntity<List<User>> updateUser(@PathVariable Integer id, @Valid @RequestBody User user, @RequestParam(value = "selectedRoles") Set<String> selectedRoles ) {
         Set<Role> rolesSet = roleService.getRolesFromIds(selectedRoles);
         user.setRoles(rolesSet);
         user.setId(id);
         userService.save(user);
-        return user;
+        return ResponseEntity.ok(userService.findAll());
     }
 
     @DeleteMapping ("/users/{id}")
-    public String deleteUser(@PathVariable Integer id) {
+    public ResponseEntity<List<User>> deleteUser(@PathVariable Integer id) {
         userService.delete(id);
-        return "User with id " + id + " was deleted";
+        return ResponseEntity.ok(userService.findAll());
     }
 
 }

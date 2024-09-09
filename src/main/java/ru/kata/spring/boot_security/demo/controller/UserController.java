@@ -23,12 +23,11 @@ public class UserController {
 
     private final UserService userService;
 
-    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping()
+    @GetMapping
     public String showPageUser(Principal principal, Model model) {
         model.addAttribute("user", userService.findByUsername(principal.getName()));
         return "user";
