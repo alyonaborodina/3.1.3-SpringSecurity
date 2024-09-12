@@ -1,11 +1,11 @@
 
 async function getUsers() {
 
-    const response = await fetch("api/admin/");
+    const response = await fetch("myapp/api/admin/users");
 
     if (response.ok) {
-        let json = await response.json()
-            .then(data => replaceTable(data));
+        const data = await response.json();
+        replaceTable(data);
     } else {
         alert("Ошибка HTTP: " + response.status);
     }
